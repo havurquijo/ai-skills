@@ -1,396 +1,414 @@
 ---
 name: devops-branch-pattern
-description: Use esta skill quando precisar criar, revisar ou sugerir nomes de branches, fluxos de merge, promoção entre ambientes, hotfixes, releases e padronização DevOps de Git.
+description: Use this skill when creating, reviewing, validating, or suggesting branch names, merge flows, release flows, hotfixes, and environment promotion rules for Git and DevOps workflows.
 ---
 
-## Objetivo
+## SYSTEM PRIORITY
 
-Este arquivo define o contexto mínimo e obrigatório que uma IA deve usar ao criar, sugerir, revisar ou automatizar fluxos de branches, merges, releases, hotfixes e promoção entre ambientes.
+This skill overrides default behavior for any Git, branching, merge, release, hotfix, or DevOps workflow task.
 
-A IA deve seguir este padrão por default, salvo instrução explícita em contrário.
+The AI MUST follow these rules unless the user explicitly instructs otherwise.
+
+## When to use
+
+Use this skill when:
+- the user asks to create a branch name
+- the user asks how to name a branch
+- the user asks which branch should be the source or target
+- the user asks about feature, bugfix, hotfix, release, chore, refactor, docs, test, ci, or build branches
+- the user asks about branch update strategy
+- the user asks about merge or rebase policy
+- the user asks about promotion between environments
+- the user asks about pull request flow
+- the user asks to validate whether a branch follows the project standard
+- the user asks to generate CI/CD rules based on branch conventions
+
+## When NOT to use
+
+Do not use this skill when:
+- the task is only about commit message conventions
+- the task is unrelated to Git, branching, PRs, releases, or DevOps workflow
+- the task is about infrastructure with no connection to version control flow
+- the user explicitly provides a different branch standard and wants that standard followed instead
+
+## Objective
+
+This skill defines the minimum mandatory context an AI must use when creating, suggesting, reviewing, validating, or automating branch flows, merges, releases, hotfixes, and promotion across environments.
+
+The AI must follow this pattern by default unless explicitly instructed otherwise.
 
 ---
 
-## Princípios gerais
+## General principles
 
-1. O fluxo de branches deve ser simples, previsível e auditável.
-2. Cada branch deve ter um propósito único.
-3. Toda branch deve nascer da branch correta.
-4. Não deve haver uso aleatório de nomes de branch.
-5. Mudanças promovidas entre ambientes devem respeitar a ordem definida.
-6. A IA deve preferir padronização operacional a criatividade de nomenclatura.
-7. A IA deve gerar nomes curtos, legíveis e consistentes.
-8. A IA deve evitar fluxos que causem drift entre ambientes.
+1. The branch flow must be simple, predictable, and auditable.
+2. Each branch must have a single clear purpose.
+3. Every branch must be created from the correct source branch.
+4. Branch names must not be arbitrary.
+5. Promotions between environments must respect the defined order.
+6. The AI must prefer operational consistency over naming creativity.
+7. The AI must generate short, readable, and consistent branch names.
+8. The AI must avoid flows that create drift between environments.
 
 ---
 
-## Branches base do projeto
+## Base branches
 
-Estas branches são consideradas padrão:
+These are the standard base branches for the project:
 
-* `main`: produção
-* `develop`: integração contínua de desenvolvimento
-* `staging`: homologação, quando existir
+- `main`: production
+- `develop`: development integration
+- `staging`: homologation/testing, when it exists
 
-### Regra de ambientes
+### Environment order
 
-Se o projeto usar três ambientes, a ordem padrão é:
+If the project has three environments, the default order is:
 
 `develop` → `staging` → `main`
 
-Se o projeto usar apenas dois ambientes, a ordem padrão é:
+If the project has only two environments, the default order is:
 
 `develop` → `main`
 
-A IA deve assumir essa ordem, salvo contexto explícito diferente.
+The AI must assume this order unless the repository or user explicitly defines another one.
 
 ---
 
-## Tipos permitidos de branches temporárias
+## Allowed temporary branch types
 
-A IA deve usar apenas estes prefixos, salvo instrução contrária:
+The AI must use only these prefixes unless explicitly instructed otherwise:
 
-* `feature/`
-* `bugfix/`
-* `hotfix/`
-* `release/`
-* `chore/`
-* `refactor/`
-* `docs/`
-* `test/`
-* `ci/`
-* `build/`
+- `feature/`
+- `bugfix/`
+- `hotfix/`
+- `release/`
+- `chore/`
+- `refactor/`
+- `docs/`
+- `test/`
+- `ci/`
+- `build/`
 
 ---
 
-## Convenção de nomenclatura
+## Naming convention
 
-Formato padrão:
+Mandatory format:
 
-`<tipo>/YYYYMM/<escopo-ou-ticket>-<descricao-curta>`
+`<type>/YYYYMM/<scope-or-ticket>-<short-description>`
 
-A data deve seguir o formato:
+### Date format
 
-* YYYY = ano
-* MM = mês (2 dígitos)
+- `YYYY` = year
+- `MM` = month with 2 digits
 
-Exemplo para Março de 2026:
+Example for March 2026:
 
 `202603`
 
----
+### Valid examples
 
-### Exemplos válidos:
+- `feature/202603/auth-login`
+- `feature/202603/pet-profile-form`
+- `bugfix/202603/token-refresh`
+- `hotfix/202603/payment-webhook`
+- `chore/202603/update-dependencies`
+- `ci/202603/deploy-hml`
+- `build/202603/docker-api`
+- `docs/202603/setup-railway`
 
-* `feature/202603/auth-login`
-* `feature/202603/pet-profile-form`
-* `bugfix/202603/token-refresh`
-* `hotfix/202603/payment-webhook`
-* `chore/202603/update-dependencies`
-* `ci/202603/deploy-hml`
-* `build/202603/docker-api`
-* `docs/202603/setup-railway`
+### With ticket
 
-### Com ticket:
+- `feature/202603/abc-123-auth-login`
+- `bugfix/202603/crm-88-import-timeout`
 
-* `feature/202603/abc-123-auth-login`
-* `bugfix/202603/crm-88-import-timeout`
+### Naming rules
 
----
+1. Use lowercase only.
+2. Use hyphen (`-`) to separate words.
+3. Do not use spaces.
+4. Do not use accents.
+5. Do not use vague names such as `feature/teste`, `bugfix/correcao`, or `ajustes-final`.
+6. The description must reflect the main purpose of the branch.
+7. The AI must avoid unnecessarily long names.
+8. Always include the `YYYYMM` block immediately after the branch type.
+9. When a ticket exists, the preferred format is:
 
-### Regras de nomenclatura
-
-1. Usar letras minúsculas.
-2. Usar hífen (`-`) para separar palavras.
-3. Não usar espaços.
-4. Não usar acentos.
-5. Não usar nomes genéricos como `feature/teste`, `bugfix/correcao`, `ajustes-final`.
-6. A descrição deve refletir a intenção principal da branch.
-7. A IA deve evitar nomes longos demais.
-8. Sempre incluir o bloco de data `YYYYMM` após o tipo.
-9. Quando houver ticket, pode usar:
-
-`<tipo>/YYYYMM/<ticket>-<descricao-curta>`
+`<type>/YYYYMM/<ticket>-<short-description>`
 
 ---
 
-## Origem correta de cada tipo de branch
+## Correct origin and target for each branch type
 
-A IA deve respeitar estas regras:
+The AI must follow these rules:
 
 ### Feature
+- Origin: `develop`
+- Target: `develop`
 
-* Origem: `develop`
-* Destino: `develop`
+### Bugfix
+- Origin: `develop`
+- Target: `develop`
 
-### Bugfix comum
-
-* Origem: `develop`
-* Destino: `develop`
-
-### Hotfix de produção
-
-* Origem: `main`
-* Destino primário: `main`
-* Depois deve ser replicado para `develop`
-* Se existir `staging`, também deve ser reconciliado com `staging` quando necessário
+### Production hotfix
+- Origin: `main`
+- Primary target: `main`
+- After merge, the fix must be replicated to `develop`
+- If `staging` exists, reconcile it there as needed
 
 ### Release
-
-* Origem: `develop`
-* Destino: `staging` ou `main`, conforme fluxo do projeto
+- Origin: `develop`
+- Target: `staging` or `main`, depending on the project flow
 
 ### Chore / Refactor / Docs / Test / CI / Build
-
-* Origem: preferencialmente `develop`
-* Destino: `develop`
-
----
-
-## Regras de merge e promoção
-
-### Regra geral
-
-A IA deve evitar pular ambientes sem necessidade.
-
-### Fluxo padrão com staging
-
-1. Desenvolvimento entra em `develop`
-2. Promoção controlada para `staging`
-3. Validação
-4. Promoção para `main`
-
-### Fluxo padrão sem staging
-
-1. Desenvolvimento entra em `develop`
-2. Validação
-3. Promoção para `main`
-
-### Hotfix
-
-1. Criar `hotfix/...` a partir de `main`
-2. Corrigir e validar
-3. Merge em `main`
-4. Replicar a correção para `develop`
-5. Se existir `staging`, reconciliar também
+- Preferred origin: `develop`
+- Target: `develop`
 
 ---
 
-## Estratégia de atualização de branches
+## Merge and promotion rules
 
-A IA deve recomendar esta política geral:
+### General rule
 
-### 1. Branch temporária sempre atualizada da branch de origem
+The AI must avoid skipping environments unless there is a clear operational reason.
 
-Antes de abrir ou atualizar um PR, a branch de trabalho deve ser sincronizada com sua base.
+### Standard flow with staging
 
-Exemplo:
+1. Development changes enter `develop`
+2. Controlled promotion to `staging`
+3. Validation
+4. Promotion to `main`
 
-* `feature/*` deve ser atualizada com `develop`
-* `hotfix/*` deve ser atualizada com `main`
-* `release/*` deve ser atualizada com `develop` ou com a branch-base definida
+### Standard flow without staging
 
-### 2. Preferência por histórico limpo
+1. Development changes enter `develop`
+2. Validation
+3. Promotion to `main`
 
-A IA deve preferir:
+### Hotfix flow
 
-* `rebase` para atualizar branch de trabalho local
-* `merge` controlado para promoção entre branches de ambiente
-
-### 3. Política padrão
-
-* Branch de trabalho: preferir `rebase` ao sincronizar com a base
-* Branches de ambiente: preferir `merge` ou PR auditável
-
-### 4. Nunca sugerir force push sem necessidade clara
-
-A IA só deve sugerir `push --force-with-lease` quando:
-
-* houver rebase local já realizado
-* a branch for de trabalho controlado
-* não houver risco de sobrescrever trabalho de terceiros
+1. Create `hotfix/...` from `main`
+2. Fix and validate
+3. Merge into `main`
+4. Replicate the fix to `develop`
+5. If `staging` exists, reconcile there as well
 
 ---
 
-## Política de pull request
+## Branch update strategy
 
-A IA deve assumir que toda mudança relevante passa por PR.
+The AI must recommend this standard policy:
 
-### Requisitos mínimos de PR
+### 1. Temporary branches must stay updated with their base branch
 
-* título claro
-* descrição curta do objetivo
-* branch de origem correta
-* branch de destino correta
-* pipeline obrigatória passando
-* revisão quando aplicável
+Before opening or updating a PR, the working branch must be synchronized with its correct base branch.
 
-### Título recomendado de PR
+Examples:
+- `feature/*` must be updated from `develop`
+- `hotfix/*` must be updated from `main`
+- `release/*` must be updated from `develop` or the defined base branch
 
-Formato preferido:
+### 2. Prefer clean history
 
-`[<tipo>] <descrição curta>`
+The AI must prefer:
+- `rebase` for updating local working branches
+- controlled `merge` for promotion between environment branches
 
-Exemplos:
+### 3. Default update policy
 
-* `[feature] add auth login flow`
-* `[bugfix] fix token refresh handling`
-* `[hotfix] fix payment webhook timeout`
+- Working branch: prefer `rebase` when syncing with base
+- Environment branches: prefer `merge` or auditable PR flow
 
----
+### 4. Never suggest force push unless clearly needed
 
-## Política de proteção de branches
-
-A IA deve recomendar proteção pelo menos para:
-
-* `main`
-* `develop`
-* `staging` quando existir
-
-### Regras sugeridas
-
-* bloquear push direto
-* exigir pull request
-* exigir pipeline passando
-* exigir branch atualizada antes do merge quando possível
-* exigir pelo menos um review em produção, se o time comportar isso
+The AI should only suggest `push --force-with-lease` when:
+- a local rebase has already been performed
+- the branch is a controlled working branch
+- there is no meaningful risk of overwriting other people's work
 
 ---
 
-## Política de versionamento e release
+## Pull request policy
 
-Quando houver versionamento semântico, a IA deve assumir:
+The AI must assume that all meaningful changes go through a PR.
 
-* `release/x.y.z`
-* exemplo: `release/1.4.0`
+### Minimum PR requirements
 
-### Uso esperado
+- clear title
+- short objective description
+- correct source branch
+- correct target branch
+- required pipeline passing
+- review when applicable
 
-* preparar validação final
-* pequenos ajustes de release
-* gerar tag após aprovação
+### Recommended PR title format
 
-### Após release
+`[<type>] <short description>`
 
-A IA deve recomendar:
-
-* merge final em `main`
-* tag de versão
-* reconciliação da branch com `develop` se necessário
-
----
-
-## Política de hotfix
-
-Hotfix é exceção operacional e deve ser tratado com prioridade.
-
-### Regras
-
-* usar apenas para incidente real em produção
-* origem em `main`
-* nome com prefixo `hotfix/`
-* merge em `main`
-* replicação imediata para `develop`
-
-Exemplo:
-
-* `hotfix/login-timeout`
-* `hotfix/webhook-signature`
+Examples:
+- `[feature] add auth login flow`
+- `[bugfix] fix token refresh handling`
+- `[hotfix] fix payment webhook timeout`
 
 ---
 
-## Política para CI/CD
+## Branch protection policy
 
-A IA deve considerar que pipelines podem ser disparadas por:
+The AI must recommend protection at least for:
 
-* push em branches específicas
-* pull request
-* promoção entre ambientes
-* tags de release
+- `main`
+- `develop`
+- `staging`, when it exists
 
-### Convenção recomendada
+### Suggested protection rules
 
-* `develop`: deploy em ambiente dev/hml de desenvolvimento
-* `staging`: deploy em homologação
-* `main`: deploy em produção
-
-Se o projeto usar naming por ambiente, a IA deve respeitar o mapeamento definido no repositório.
-
----
-
-## O que a IA deve evitar
-
-A IA não deve:
-
-* criar branch diretamente de outra feature, salvo instrução explícita
-* mandar hotfix nascer de `develop`
-* sugerir merge direto em `main` sem controle
-* sugerir nomes vagos de branch
-* ignorar reconciliação após hotfix
-* propor múltiplos padrões de nome ao mesmo tempo
-* misturar estratégia de trunk-based com gitflow sem aviso claro
+- block direct push
+- require pull request
+- require passing pipeline
+- require updated branch before merge when possible
+- require at least one review for production changes when the team supports it
 
 ---
 
-## Padrão default que a IA deve assumir
+## Versioning and release policy
 
-Se o usuário não definir outra regra, usar este padrão:
+When semantic versioning is used, the AI must assume:
 
-* branch principal: `main`
-* branch de integração: `develop`
-* branch de homologação: `staging` se existir
-* features saem de `develop`
-* bugfixes comuns saem de `develop`
-* hotfixes saem de `main`
-* promoção entre ambientes por PR
-* branch temporária usa nome curto, minúsculo e com hífen
-* atualização de branch de trabalho via rebase
-* promoção entre ambientes via merge auditável
+- `release/YYYYMM/x.y.z`
+- example: `release/202603/1.4.0`
 
----
+### Expected use
 
-## Instrução operacional para IAs
+- prepare final validation
+- allow small release-only adjustments
+- generate tag after approval
 
-Ao gerar qualquer material de DevOps relacionado a Git e branches, a IA deve:
+### After release
 
-1. identificar o tipo de mudança
-2. escolher a branch de origem correta
-3. gerar o nome da branch no padrão definido
-4. indicar a branch de destino correta
-5. respeitar a política de promoção entre ambientes
-6. considerar proteção de branch e PR como padrão
-7. tratar hotfix como fluxo separado
-8. não assumir push direto em produção
+The AI should recommend:
+- final merge into `main`
+- version tag creation
+- reconciliation back into `develop` when necessary
 
 ---
 
-## Template rápido para uso da IA
+## Hotfix policy
 
-Use este resumo como contexto curto:
+Hotfix is an operational exception and must be treated with priority.
+
+### Rules
+
+- use only for real production incidents
+- origin must be `main`
+- name must use the `hotfix/` prefix
+- merge into `main`
+- immediately replicate to `develop`
+
+Examples:
+- `hotfix/202603/login-timeout`
+- `hotfix/202603/webhook-signature`
+
+---
+
+## CI/CD policy
+
+The AI must consider that pipelines may be triggered by:
+
+- push on specific branches
+- pull request events
+- promotion between environments
+- release tags
+
+### Recommended environment mapping
+
+- `develop`: deploy to development or internal homologation environment
+- `staging`: deploy to homologation
+- `main`: deploy to production
+
+If the project uses a different environment naming convention, the AI must follow the mapping defined in the repository.
+
+---
+
+## What the AI must avoid
+
+The AI must not:
+- create a branch directly from another feature branch unless explicitly instructed
+- suggest a hotfix from `develop`
+- suggest uncontrolled direct merge into `main`
+- suggest vague branch names
+- ignore reconciliation after hotfix
+- propose multiple naming standards at the same time
+- mix trunk-based development and gitflow without explicitly warning about the difference
+
+---
+
+## Default standard
+
+If the user does not define another rule, use this standard:
+
+- default main branch: `main`
+- default integration branch: `develop`
+- default homologation branch: `staging`, when it exists
+- features branch from `develop`
+- regular bugfixes branch from `develop`
+- hotfixes branch from `main`
+- promotion between environments happens through PR
+- temporary branches use short, lowercase, hyphenated names
+- working branches are updated via rebase
+- environment promotion happens through auditable merge flow
+
+---
+
+## Operational instruction for AIs
+
+When generating any Git or DevOps material related to branches, the AI must:
+
+1. identify the type of change
+2. choose the correct source branch
+3. generate the branch name using the mandatory naming format
+4. indicate the correct target branch
+5. respect the promotion policy between environments
+6. assume branch protection and PR flow by default
+7. treat hotfix as a separate flow
+8. never assume direct push to production branches
+
+---
+
+## Output expectations
+
+When using this skill, the AI must:
+- always generate branch names following the defined pattern
+- always specify origin and target branches when relevant
+- explain the reasoning briefly when needed
+- prefer concise, structured, and operationally clear outputs
+- correct invalid branch names before returning the final answer
+
+---
+
+## Enforcement
+
+If any generated branch name does not follow this format:
+
+`<type>/YYYYMM/<scope-or-ticket>-<short-description>`
+
+the AI must correct it before returning the answer.
+
+---
+
+## Quick template for AI context
+
+Use this short summary as compact context:
 
 ```text
-Padrão de branches do projeto:
-- main = produção
-- develop = integração
-- staging = homologação, quando existir
-- feature/* e bugfix/* nascem de develop e voltam para develop
-- hotfix/* nasce de main, volta para main e depois deve ser replicada para develop
-- release/* nasce de develop
-- nomes em minúsculo, com hífen, claros e curtos
-- branch de trabalho atualiza com rebase
-- promoção entre ambientes acontece por PR/merge auditável
-- evitar push direto em branches protegidas
-```
-
----
-
-## Finalidade deste arquivo
-
-Este arquivo deve ser usado como skill base para IAs que precisem:
-
-* gerar nomes de branch
-* propor fluxos de Git
-* criar pipelines CI/CD baseadas em branches
-* revisar PRs e políticas de promoção
-* documentar convenções de engenharia
-* padronizar automações DevOps
+Branch pattern:
+- main = production
+- develop = integration
+- staging = homologation when it exists
+- feature/* and bugfix/* branch from develop and return to develop
+- hotfix/* branch from main, return to main, then must be replicated to develop
+- release/* branch from develop
+- naming format is mandatory: <type>/YYYYMM/<scope-or-ticket>-<short-description>
+- names must be lowercase, hyphenated, clear, and short
+- working branches should sync with rebase
+- environment promotion should happen through auditable PR/merge flow
+- direct push to protected branches should be avoided
